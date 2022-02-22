@@ -52,7 +52,14 @@ public class MyMain {
     // Tail Recursive Method:
     public static int sumTR(int[] arr, int i, int sum) {
         // YOUR CODE HERE
-        return -1;
+        //base case
+        if(i==arr.length-1){
+            return sum+arr[i];
+        }
+        else{
+            sum+= arr[i];
+            return sumTR(arr,i+1,sum);
+        }
     }
 
 
@@ -70,13 +77,23 @@ public class MyMain {
     // Wrapper Method (Provided for you):
     public static boolean search(ArrayList<Integer> list, int x) {
         // YOUR CODE HERE
-        return false;
+        return searchTR(list,x, 0);
     }
 
     // Tail Recursive Method:
     public static boolean searchTR(ArrayList<Integer> list, int x, int i) {
         // YOUR CODE HERE
-        return false;
+        //base case
+        if(i==list.size()-1 && list.get(list.size()-1)!=x){
+            return false;
+        }
+        //recursive case
+        else if(list.get(i)==x){
+            return true;
+        }
+        else{
+            return searchTR(list,x,i+1);
+        }
     }
 
 
@@ -90,12 +107,28 @@ public class MyMain {
     // Wrapper Method (Provided for you):
     public static boolean allEven(int[] arr) {
         // YOUR CODE HERE
-        return false;
+
+
+        return allEvenTR(arr,0);
     }
 
     // Tail Recursive Method:
     // You should write this yourself!
-
+    public static boolean allEvenTR(int[] arr, int i){
+        //base case
+        if(i==arr.length-1 && arr[i]%2==0){
+           return true;
+        }
+        //recursive case
+        //update i if arr[i] is even
+        else if(arr[i]%2!=1){
+            return allEvenTR(arr, i+1);
+        }
+        //return false
+        else{
+            return false;
+        }
+    }
 
     // ********************
     // Examples From Class:
@@ -137,7 +170,26 @@ public class MyMain {
     // Wrapper method
     public static boolean hasCountCopies(int[] arr, int x, int count) {
         // YOUR CODE HERE
-        return false;
+        //base case:
+        return hasCountCopiesTR(arr, x, count, 0,0);
+    }
+    public static boolean hasCountCopiesTR(int[] arr, int x, int count, int index, int found){
+        if(index==arr.length){
+            if(found == count){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        else if(arr[index]==x){
+
+            found+=1;
+            return hasCountCopiesTR(arr,x,count,index+1, found);
+        }
+        else{
+            return hasCountCopiesTR(arr,x,count,index+1,found);
+        }
     }
 
     // You may want a tail recursive method
@@ -149,7 +201,18 @@ public class MyMain {
     // Wrapper method
     public static boolean isSorted(ArrayList<Integer> list) {
         // YOUR CODE HERE
-        return false;
+        return isSortedTR(list,0,Integer.MIN_VALUE);
+    }
+    public static boolean isSortedTR(ArrayList<Integer> list, int i, int checker){
+        if(i==list.size()){
+            return true;
+        }
+        else if(list.get(i)<checker){
+            return false;
+        }
+        else{
+            return isSortedTR(list, i+1,list.get(i));
+        }
     }
 
     // You may want a tail recursive method
@@ -183,8 +246,34 @@ public class MyMain {
 
     // No tail recursion necessary!
     public static boolean escape(char[][] mat, int row, int col) {
-        // YOUR CODE HERE
-        return false;
+        // I just return return true if any of the available spots contains an 'f'
+        // Check out of bounds, return
+        if (row < 0 || col < 0 || row >= mat.length || col >= mat[0].length){
+            return false;
+        }
+        // If we're at wall, don't do anything
+        else if (mat[row][col] == 'w') {
+            return false;
+        }
+        // If we've already visited there, let's return early
+        else if (mat[row][col] == '*') {
+            return false;
+        }
+        else if (mat[row][col] == 'f') {
+            return true;
+        }
+        else {
+            // Leave "breadcrumbs"
+            mat[row][col] = '*';
+
+                // Visit our neighbors (left, up, right, down)
+                boolean b1 = escape(mat, row, col - 1);
+                boolean b2 = escape(mat, row - 1, col);
+                boolean b3 = escape(mat, row, col + 1);
+                boolean b4 = escape(mat, row + 1, col);
+                return(b1||b2||b3||b4);
+
+            }
     }
 
 
